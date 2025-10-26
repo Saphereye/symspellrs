@@ -1,0 +1,21 @@
+[package]
+name = "symspellrs-macros"
+version = "0.1.0"
+edition = "2021"
+description = "Proc-macro crate providing compile-time dictionary embedding for symspellrs"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2 = "1.0"
+quote = "1.0"
+syn = { version = "2.0", features = ["full"] }
+
+# phf macros are used in generated expansion, include for convenience
+phf = { version = "0.10", features = ["macros"] }
+
+[features]
+default = []

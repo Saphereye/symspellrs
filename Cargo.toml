@@ -1,0 +1,26 @@
+[package]
+name = "symspellrs"
+version = "0.1.0"
+edition = "2021"
+description = "Rust compile time library for symspell"
+repository = "https://github.com/Saphereye/symspellrs"
+license = "MIT OR Apache-2.0"
+
+[lib]
+name = "symspellrs"
+path = "src/lib.rs"
+crate-type = ["lib"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+phf = { version = "0.10", features = ["macros"] }
+symspellrs_macros = { package = "symspellrs-macros", path = "macros" }
+
+[features]
+default = []
+
+[workspace]
+members = [
+    "macros",
+]

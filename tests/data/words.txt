@@ -1,0 +1,20 @@
+# Test dictionary for symspellrs (one word per line; frequencies default to 1)
+hello
+hell
+help
+world
+rust
+symspell
+test
+tost
+tasting
+example
+apple
+apply
+applied
+the
+and
+be
+to
+too
+two
