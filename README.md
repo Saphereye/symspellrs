@@ -2,31 +2,85 @@
 
 [![Crates.io](https://img.shields.io/crates/v/symspellrs.svg)](https://crates.io/crates/symspellrs)
 [![Docs.rs](https://docs.rs/symspellrs/badge.svg)](https://docs.rs/symspellrs)
-[![CI](https://github.com/Saphereye/symspellrs/workflows/CI/badge.svg)](https://github.com/Saphereye/symspellrs/actions)
 
-## Installation
+A compact Rust library implementing a SymSpell-style fuzzy-word suggestion algorithm.
+It supports two primary modes:
 
-### Cargo
+- Compile-time embedding — use the `include_dictionary!` proc-macro to embed a dictionary
+  (and optionally a precomputed deletion index) into the binary.
+- Runtime construction — build a `SymSpell` instance at runtime from an iterator of
+  `(String, usize)` pairs (word, frequency).
 
-* Install the rust toolchain in order to have cargo installed by following
-  [this](https://www.rust-lang.org/tools/install) guide.
-* run `cargo install symspellrs`
+This README contains quick usage commands, example snippets and developer commands.
 
-## License
+Quick commands
+--------------
 
-Licensed under either of
+- Run the included example (demonstrates compile-time and runtime usage):
+  ```bash
+  cargo run --example simple_usage
+  ```
 
- * Apache License, Version 2.0
-   ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
- * MIT license
-   ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
+- Run the test suite:
+  ```bash
+  cargo test --workspace
+  ```
 
-at your option.
+- Format and lint:
+  ```bash
+  cargo fmt --all
+  cargo clippy --all-targets --all-features -- -D warnings
+  ```
 
-## Contribution
+- Build release artifacts:
+  ```bash
+  cargo build --workspace --release
+  ```
 
-Unless you explicitly state otherwise, any contribution intentionally submitted
-for inclusion in the work by you, as defined in the Apache-2.0 license, shall be
-dual licensed as above, without any additional terms or conditions.
+Simple usage examples
+---------------------
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+These small snippets show the most common usage patterns. See `examples/simple_usage.rs`
+for a complete runnable example.
+
+1) Compile-time embedding (recommended when your dictionary is static)
+
+The `include_dictionary!` proc-macro reads a dictionary file at compile time (path is evaluated
+relative to the crate root) and returns a ready-to-use value (when `precompute = true` you get
+an `EmbeddedSymSpell`-like value backed by `phf` statics; otherwise the macro constructs a
+runtime `SymSpell`).
+
+```ignore
+use symspellrs::include_dictionary;
+use symspellrs::Verbosity;
+
+// Read tests/data/words.txt at compile time and build a ready value.
+let sym = include_dictionary!("tests/data/words.txt", max_distance = 2, lowercase = true);
+
+// Query the embedded instance:
+let maybe_best = sym.find_top("helo");             // Option<Suggestion>
+let closest = sym.lookup("helo", 2, Verbosity::Closest);
+```
+
+2) Runtime construction (dynamic dictionaries)
+
+If you load dictionaries from the network, a database, or need to modify them at runtime,
+use `SymSpell::from_iter` or `SymSpell::load_iter`:
+
+```ignore
+use symspellrs::{SymSpell, Verbosity};
+
+let entries = vec![
+    ("hello".to_string(), 3usize),
+    ("world".to_string(), 5usize),
+];
+
+let sym = SymSpell::from_iter(2, entries);
+let results = sym.lookup("helo", 2, Verbosity::Top);
+```
+
+Where to look
+--------------
+
+- Example: `examples/simple_usage.rs` — shows both compile-time embedding and runtime builder.
+- Tests: `tests/` — includes tests that exercise the compile-time macro and runtime lookup.

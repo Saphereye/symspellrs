@@ -1,6 +1,6 @@
 [package]
 name = "symspellrs"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2021"
 description = "Rust compile time library for symspell"
 repository = "https://github.com/Saphereye/symspellrs"
