@@ -14,7 +14,7 @@ crate-type = ["lib"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-phf = { version = "0.10", features = ["macros"] }
+phf = { version = "0.13", features = ["macros"] }
 symspellrs_macros = { version = "0.1.0", package = "symspellrs-macros", path = "macros" }
 
 [features]
