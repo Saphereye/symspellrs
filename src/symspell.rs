@@ -104,10 +104,7 @@ impl SymSpell {
             // Generate deletes and update delete-index
             let dels = generate_deletes(&word, self.max_distance);
             for d in dels {
-                self.deletes
-                    .entry(d)
-                    .or_insert_with(HashSet::new)
-                    .insert(word.clone());
+                self.deletes.entry(d).or_default().insert(word.clone());
             }
         }
     }
@@ -492,7 +489,7 @@ fn generate_deletes(word: &str, max_distance: u8) -> HashSet<String> {
     for _d in 0..max_distance {
         let mut next: BTreeSet<String> = BTreeSet::new();
         for s in &queue {
-            if s.len() == 0 {
+            if s.is_empty() {
                 continue;
             }
             for i in 0..s.len() {
