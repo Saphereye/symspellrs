@@ -6,9 +6,9 @@
 A compact Rust library implementing a SymSpell-style fuzzy-word suggestion algorithm.
 It supports two primary modes:
 
-- Compile-time embedding — use the `include_dictionary!` proc-macro to embed a dictionary
+- Compile-time embedding: use the `include_dictionary!` proc-macro to embed a dictionary
   (and optionally a precomputed deletion index) into the binary.
-- Runtime construction — build a `SymSpell` instance at runtime from an iterator of
+- Runtime construction: build a `SymSpell` instance at runtime from an iterator of
   `(String, usize)` pairs (word, frequency).
 
 This README contains quick usage commands, example snippets and developer commands.
@@ -50,7 +50,7 @@ relative to the crate root) and returns a ready-to-use value (when `precompute =
 an `EmbeddedSymSpell`-like value backed by `phf` statics; otherwise the macro constructs a
 runtime `SymSpell`).
 
-```ignore
+```rust
 use symspellrs::include_dictionary;
 use symspellrs::Verbosity;
 
@@ -67,7 +67,7 @@ let closest = sym.lookup("helo", 2, Verbosity::Closest);
 If you load dictionaries from the network, a database, or need to modify them at runtime,
 use `SymSpell::from_iter` or `SymSpell::load_iter`:
 
-```ignore
+```rust
 use symspellrs::{SymSpell, Verbosity};
 
 let entries = vec![
@@ -79,7 +79,7 @@ let sym = SymSpell::from_iter(2, entries);
 let results = sym.lookup("helo", 2, Verbosity::Top);
 ```
 
-Where to look
+Examples
 --------------
 
 - Example: `examples/simple_usage.rs` — shows both compile-time embedding and runtime builder.

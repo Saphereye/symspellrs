@@ -39,8 +39,8 @@ fn example_compile_time() {
     println!("=== Compile-time built SymSpell ===");
 
     // Exact lookup (Top verbosity)
-    let exact = sym.lookup("world", 2, Verbosity::Top);
-    print_suggestions("Exact lookup for 'world'", &exact);
+    let exact = sym.lookup("worl", 2, Verbosity::Top);
+    print_suggestions("Exact lookup for 'worl'", &exact);
 
     // Misspelling: 'helo' -> expect 'hello'
     let suggestions = sym.lookup("helo", 2, Verbosity::Closest);
