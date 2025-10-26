@@ -364,7 +364,24 @@ impl EmbeddedSymSpell {
         }
 
         if results.is_empty() {
-            return Vec::new();
+            // Fallback: if no candidates were discovered via the precomputed deletes map,
+            // scan the embedded dictionary directly as a last-resort option. This keeps
+            // behavior consistent with a runtime-built SymSpell when the deletes index
+            // might not include helpful variants for short or unusual queries.
+            for (k, &v) in self.dict.entries() {
+                let distance = damerau_levenshtein(term, k);
+                if distance <= max_distance {
+                    results.push(Suggestion {
+                        term: k.to_string(),
+                        frequency: v,
+                        distance,
+                    });
+                }
+            }
+
+            if results.is_empty() {
+                return Vec::new();
+            }
         }
 
         // Determine minimal distance among results
@@ -451,6 +468,16 @@ impl EmbeddedSymSpell {
         *self.dict.get(word).unwrap_or(&0usize)
     }
 }
+
+/* Repository-level git-hook helper removed from the library source.
+
+   Git hooks are repository maintenance scripts and should live in the
+   repository tooling (e.g. a `scripts/` directory) or be documented in the
+   project README. They must not be exposed as part of the library API.
+
+   If you need to install repository hooks locally, add a short script under
+   `./scripts/install-hooks.sh` or use your CI/automation to provision hooks.
+*/
 
 /// Generate all deletion variants for `word` up to `max_distance`.
 ///
