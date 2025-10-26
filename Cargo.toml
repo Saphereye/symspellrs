@@ -1,6 +1,6 @@
 [package]
 name = "symspellrs"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2021"
 description = "Rust compile time library for symspell"
 repository = "https://github.com/Saphereye/symspellrs"
@@ -15,7 +15,7 @@ crate-type = ["lib"]
 
 [dependencies]
 phf = { version = "0.10", features = ["macros"] }
-symspellrs_macros = { package = "symspellrs-macros", path = "macros" }
+symspellrs_macros = { version = "0.1.0", package = "symspellrs-macros", path = "macros" }
 
 [features]
 default = []
